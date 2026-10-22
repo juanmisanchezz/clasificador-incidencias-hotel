@@ -1,0 +1,10 @@
+# Mismas versiones que el repo del profe (thepower-modelos), probadas juntas.
+torch==2.14.1
+transformers==5.19.0
+datasets==5.1.0
+trl==1.14.0
+peft==0.21.2
+accelerate==1.15.0
+huggingface-hub==1.33.0
+python-dotenv==1.2.4
+pytest
