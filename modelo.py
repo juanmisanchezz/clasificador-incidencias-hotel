@@ -2,6 +2,7 @@ import os
 import torch
 from dotenv import load_dotenv
 from transformers import AutoTokenizer, AutoModelForCausalLM
+import json
 
 load_dotenv()
 
@@ -31,3 +32,16 @@ def generar(modelo, tokenizer, mensajes):
         respuesta = tokenizer.decode(nuevos, skip_special_tokens=True)
     
     return respuesta
+
+def mensajes(incidencia, fewshot=False):
+    lista = [{"role": "system", "content": open("prompts/basico.txt").read()}]
+    if fewshot:
+        ids = json.loads(open("prompts/fewshot-ids.json").read())
+        for fila in open("datos/train.jsonl"):
+            ejemplo = json.loads(fila)
+            if ejemplo["id"] in ids:
+                lista.append({"role": "user", "content": ejemplo["incidencia"]})
+                lista.append({"role": "assistant", "content": json.dumps(ejemplo["objetivo"], ensure_ascii=False)})
+    lista.append({"role": "user", "content": incidencia})
+
+    return lista
