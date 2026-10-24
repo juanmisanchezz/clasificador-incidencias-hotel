@@ -3,6 +3,7 @@ import torch
 from dotenv import load_dotenv
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import json
+from peft import PeftModel
 
 load_dotenv()
 
@@ -14,6 +15,8 @@ def cargar(adaptador=None):
     nombre = os.getenv("OPEN_MODEL_ID")
     tokenizer = AutoTokenizer.from_pretrained(nombre)
     modelo = AutoModelForCausalLM.from_pretrained(nombre, dtype=torch.float32).to(dispositivo)
+    if adaptador:
+        modelo = PeftModel.from_pretrained(modelo, adaptador)
     modelo.eval()
 
     return modelo, tokenizer
